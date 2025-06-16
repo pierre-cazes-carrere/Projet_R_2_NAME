@@ -1,0 +1,179 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Analyse interactive de l'obésité avec R Shiny},
+  pdfauthor={{[}Ton Nom{]}},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Analyse interactive de l'obésité avec R Shiny}
+\author{{[}Ton Nom{]}}
+\date{2025-06-13}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}\label{introduction}
+
+Ce projet vise à analyser un jeu de données sur les habitudes de vie et
+l'obésité afin d'identifier les comportements associés à un risque
+accru. Il s'appuie sur un tableau de données public intitulé
+\textbf{ObesityDataSet\_raw\_and\_data\_sinthetic.csv} et utilise
+\textbf{R Shiny} pour créer un tableau de bord interactif permettant
+l'exploration dynamique des résultats.
+
+\section{1. Exploration et préparation des
+données}\label{exploration-et-pruxe9paration-des-donnuxe9es}
+
+Les variables principales incluent : - \texttt{Age}, \texttt{Gender},
+\texttt{Height}, \texttt{Weight} → données personnelles - \texttt{BMI}
+(calculé) → indicateur principal - \texttt{FAVC}, \texttt{CAEC},
+\texttt{CALC} → habitudes alimentaires - \texttt{FAF} → activité
+physique - \texttt{MTRANS} → moyen de transport - \texttt{NObeyesdad} →
+classe d'obésité (cible)
+
+\subsection{Nettoyage appliqué :}\label{nettoyage-appliquuxe9}
+
+\begin{itemize}
+\tightlist
+\item
+  Suppression des valeurs aberrantes sur \texttt{Age}, \texttt{Height},
+  \texttt{Weight}, \texttt{BMI}
+\item
+  Transformation des variables qualitatives en facteurs
+\item
+  Ajout d'une colonne \texttt{AgeGroup} pour regrouper les âges
+\end{itemize}
+
+\section{2. Objectif du dashboard
+Shiny}\label{objectif-du-dashboard-shiny}
+
+Le dashboard permet de : - Filtrer les données par \texttt{Genre} et
+\texttt{Tranche\ d\textquotesingle{}âge} - Visualiser les différences
+entre classes d'obésité selon : - Les habitudes de grignotage
+(\texttt{CAEC}) - L'activité physique (\texttt{FAF}) - Le moyen de
+transport (\texttt{MTRANS})
+
+\section{3. Visualisations incluses}\label{visualisations-incluses}
+
+\begin{itemize}
+\tightlist
+\item
+  Histogramme de la répartition des classes d'obésité
+  (\texttt{NObeyesdad})
+\item
+  Graphique en barre sur les habitudes alimentaires (\texttt{CAEC} vs
+  obésité)
+\item
+  Boxplot de l'activité physique (\texttt{FAF} vs obésité)
+\item
+  Graphique en barre des moyens de transport par classe
+\end{itemize}
+
+\section{4. Insights observés}\label{insights-observuxe9s}
+
+\begin{itemize}
+\tightlist
+\item
+  Une fréquence de grignotage plus élevée est associée à des niveaux
+  plus sévères d'obésité
+\item
+  L'activité physique est généralement plus basse chez les individus
+  obèses
+\item
+  Les personnes utilisant le transport public semblent davantage
+  concernées par le surpoids
+\end{itemize}
+
+\section{5. Conclusion}\label{conclusion}
+
+Ce dashboard interactif met en lumière plusieurs corrélations
+comportementales liées à l'obésité. Il constitue un outil utile pour les
+analystes ou professionnels de santé souhaitant explorer rapidement les
+profils à risque.
+
+\section{6. Captures d'écran (ajouter
+manuellement)}\label{captures-duxe9cran-ajouter-manuellement}
+
+\begin{itemize}
+\tightlist
+\item
+  Screenshot 1 : Interface principale
+\item
+  Screenshot 2 : Visualisation des classes d'obésité
+\item
+  Screenshot 3 : Grignotage vs obésité
+\end{itemize}
+
+\section{7. Références}\label{ruxe9fuxe9rences}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://shiny.posit.co/}{Documentation Shiny}
+\item
+  \href{https://www.tidyverse.org/}{Tidyverse}
+\item
+  \href{https://www.kaggle.com/datasets/}{Dataset original - Kaggle}
+\end{itemize}
+
+\end{document}
