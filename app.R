@@ -2,6 +2,7 @@
 
 library(shiny)
 library(tidyverse)
+library(scales)
 
 # Charger et nettoyer les données
 data <- read_csv("data/ObesityDataSet_raw_and_data_sinthetic.csv") %>%
@@ -39,7 +40,11 @@ ui <- fluidPage(
       h4("Activité physique (FAF) par classe d'obésité"),
       plotOutput("activityPlot"),
       h4("Moyen de transport par classe d'obésité"),
-      plotOutput("transportPlot")
+      plotOutput("transportPlot"),
+      h4("Consommation de nourriture calorique (FAVC) par catégorie"),
+      plotOutput("favcPlot"),
+      h4("Comparaison des sexes selon la classe d'obésité et l'âge"),
+      plotOutput("genderAgePlot")
     )
   )
 )
@@ -78,9 +83,28 @@ server <- function(input, output) {
       labs(title = "Transport utilisé selon la catégorie", x = "Mode de transport", y = "Nombre") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
+  
+  output$favcPlot <- renderPlot({
+    ggplot(filteredData(), aes(x = FAVC, fill = NObeyesdad)) +
+      geom_bar(position = "dodge") +
+      labs(title = "Nourriture calorique par classe d'obésité", x = "FAVC", y = "Nombre") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+  
+  output$genderAgePlot <- renderPlot({
+    ggplot(data, aes(x = NObeyesdad, fill = Gender)) +
+      geom_bar(position = "fill") +
+      facet_wrap(~ AgeGroup) +
+      scale_y_continuous(labels = scales::percent_format()) +
+      labs(
+        title = "Pourcentage des classes d'obésité par genre & âge",
+        x = "Classe d'obésité",
+        y = "Pourcentage",
+        fill = "Genre"
+      ) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
 }
 
 # Lancer l'application
 shinyApp(ui = ui, server = server)
-
-
